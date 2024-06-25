@@ -1,4 +1,5 @@
-import { Container, Row, Col, Button, Image } from "react-bootstrap";
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import "../StyleSheets/Comp.css";
 
 const MenuDashboard = () => {
@@ -6,10 +7,10 @@ const MenuDashboard = () => {
         <Container>
             <Row>
                 <Col className="col-6">
-                {/* First Half*/}
+                <h1>First Half of Dashboard</h1>
                 </Col>
                 <Col>
-                {/* Second Half */}
+                <h1>Second Half of Dashboard</h1>
                 </Col>
             </Row>
         </Container>
