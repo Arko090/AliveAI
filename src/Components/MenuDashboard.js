@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { Container, Row, Col } from "react-bootstrap";
 import "../StyleSheets/Comp.css";
@@ -51,11 +51,17 @@ const DonutChart = ({
       <svg ref={ref}></svg>
       <div className="labels">
         <div className="label left">
-          <span className="color-box" style={{ backgroundColor: "#1D9BCE" }}></span>{" "}
+          <span
+            className="color-box"
+            style={{ backgroundColor: "#1D9BCE" }}
+          ></span>{" "}
           {label1}: {value1}%
         </div>
         <div className="label right">
-          <span className="color-box" style={{ backgroundColor: "#29D8BB" }}></span>{" "}
+          <span
+            className="color-box"
+            style={{ backgroundColor: "#29D8BB" }}
+          ></span>{" "}
           {label2}: {value2}%
         </div>
       </div>
@@ -64,20 +70,6 @@ const DonutChart = ({
 };
 
 const MenuDashboard = () => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   const dataSets = [
     { id: "1", Diabetic: 25, "Non-Diabetic": 75 },
     { id: "2", Risk: 25, Health: 75 },
@@ -89,39 +81,31 @@ const MenuDashboard = () => {
     { id: "8", Risk: 25, Health: 75 },
   ];
 
-  if (windowWidth >= 992) {
-    return (
-      <Container>
-        <Row>
-          <Col className="col-6 col-lg-6">
-            <h1>First Half of Dashboard</h1>
-          </Col>
-          <Col style={{ maxHeight: "880px", overflowY: "auto" }}>
-            <Row>
-              {dataSets.map((data) => (
-                <Col key={data.id} md={6}>
-                  <DonutChart
-                    data={Object.keys(data)
-                      .filter((key) => key !== "id")
-                      .map((key) => ({
-                        label: key,
-                        value: data[key],
-                      }))}
-                  />
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    );
-  } else {
-    return <MobileDashboard />;
-  }
-};
-
-const MobileDashboard = () => {
-  return <h2>Dashboard Mobile</h2>;
+  return (
+    <Container>
+      <Row>
+        <Col className="col-6 col-lg-6">
+          <h1>First Half of Dashboard</h1>
+        </Col>
+        <Col style={{ maxHeight: "880px", overflowY: "auto" }}>
+          <Row>
+            {dataSets.map((data) => (
+              <Col key={data.id} md={6}>
+                <DonutChart
+                  data={Object.keys(data)
+                    .filter((key) => key !== "id")
+                    .map((key) => ({
+                      label: key,
+                      value: data[key],
+                    }))}
+                />
+              </Col>
+            ))}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
 export default MenuDashboard;
