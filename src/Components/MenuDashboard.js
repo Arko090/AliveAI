@@ -66,14 +66,14 @@ const DonutChart = ({
 
 const MenuDashboard = () => {
   const dataSets = [
-    { id: "1", risk: 25, health: 75 },
-    { id: "2", risk: 25, health: 75 },
-    { id: "3", risk: 25, health: 75 },
-    { id: "4", risk: 25, health: 75 },
-    { id: "5", risk: 25, health: 75 },
-    { id: "6", risk: 25, health: 75 },
-    { id: "7", risk: 25, health: 75 },
-    { id: "8", risk: 25, health: 75 },
+    { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
+    { id: "2", "Risk": 25, "Health": 75 },
+    { id: "3", "Risk": 25, "Health": 75 },
+    { id: "4", "Risk": 25, "Health": 75 },
+    { id: "5", "Risk": 25, "Health": 75 },
+    { id: "6", "Risk": 25, "Health": 75 },
+    { id: "7", "Risk": 25, "Health": 75 },
+    { id: "8", "Risk": 25, "Health": 75 },
   ];
 
   return (
