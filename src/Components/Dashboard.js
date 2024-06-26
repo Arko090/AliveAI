@@ -35,16 +35,7 @@ const MenuData = [
   {
     icon: faHeartbeat,
     text: "Health Analysis",
-    submenuItems: [
-      { icon: faNotesMedical, text: "Diabetes Analysis" },
-      { icon: faNotesMedical, text: "Feature 2" },
-      { icon: faNotesMedical, text: "Feature 3" },
-      { icon: faNotesMedical, text: "Feature 4" },
-      { icon: faNotesMedical, text: "Feature 5" },
-      { icon: faNotesMedical, text: "Feature 6" },
-      { icon: faNotesMedical, text: "Feature 7" },
-      { icon: faNotesMedical, text: "Feature 8" },
-    ],
+    submenuItems: [{ icon: faNotesMedical, text: "Diabetes Analysis" }],
   },
   {
     icon: faComments,
@@ -77,7 +68,7 @@ const SubMenuItem = ({ icon, text, onclick }) => (
 );
 
 // Dashboard Menu List
-const MenuList = ({ toggleSubMenu, activeMenu }) => {
+const MenuList = ({ toggleSubMenu, setActiveMenu, activeMenu }) => {
   return (
     <ul className="dashboard-menu">
       {MenuData.map((item, index) => (
@@ -122,7 +113,7 @@ const MenuList = ({ toggleSubMenu, activeMenu }) => {
               icon={item.icon}
               text={item.text}
               isActive={activeMenu === index}
-              onClick={() => toggleSubMenu(index)}
+              onClick={() => setActiveMenu(index)}
             />
           )}
         </React.Fragment>
@@ -134,7 +125,6 @@ const MenuList = ({ toggleSubMenu, activeMenu }) => {
 // Web Dashboard
 const WebDashboard = () => {
   const [activeMenu, setActiveMenu] = useState(0);
-
   const toggleSubMenu = (index) =>
     setActiveMenu(activeMenu === index ? 0 : index);
 
@@ -161,7 +151,7 @@ const WebDashboard = () => {
             <h3>Welcome Arko to the Dashboard!</h3>
           </Row>
           <Row>
-            <MenuList toggleSubMenu={toggleSubMenu} activeMenu={activeMenu} />
+            <MenuList toggleSubMenu={toggleSubMenu} setActiveMenu={setActiveMenu} activeMenu={activeMenu} />
           </Row>
         </Col>
         <Col>
