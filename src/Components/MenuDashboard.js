@@ -12,6 +12,12 @@ const DonutChart = ({
 }) => {
   const ref = useRef();
 
+  const label1 = data[0].label;
+  const value1 = data[0].value;
+
+  const label2 = data[1].label;
+  const value2 = data[1].value;
+
   useEffect(() => {
     const svg = d3
       .select(ref.current)
@@ -24,7 +30,6 @@ const DonutChart = ({
       .scaleOrdinal()
       .domain(data.map((d) => d.label))
       .range(["#1D9BCE", "#29D8BB"]);
-
 
     const pie = d3.pie().value((d) => d.value);
 
@@ -50,14 +55,20 @@ const DonutChart = ({
             className="color-box"
             style={{ backgroundColor: "#1D9BCE" }}
           ></span>{" "}
-          Risk (25%)
+          {label1}
+          {": "}
+          {value1}
+          {"%"}
         </div>
         <div className="label">
           <span
             className="color-box"
             style={{ backgroundColor: "#29D8BB" }}
           ></span>{" "}
-          Health (75%)
+          {label2}
+          {": "}
+          {value2}
+          {"%"}
         </div>
       </div>
     </div>
@@ -67,13 +78,13 @@ const DonutChart = ({
 const MenuDashboard = () => {
   const dataSets = [
     { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
-    { id: "2", "Risk": 25, "Health": 75 },
-    { id: "3", "Risk": 25, "Health": 75 },
-    { id: "4", "Risk": 25, "Health": 75 },
-    { id: "5", "Risk": 25, "Health": 75 },
-    { id: "6", "Risk": 25, "Health": 75 },
-    { id: "7", "Risk": 25, "Health": 75 },
-    { id: "8", "Risk": 25, "Health": 75 },
+    { id: "2", Risk: 25, Health: 75 },
+    { id: "3", Risk: 25, Health: 75 },
+    { id: "4", Risk: 25, Health: 75 },
+    { id: "5", Risk: 25, Health: 75 },
+    { id: "6", Risk: 25, Health: 75 },
+    { id: "7", Risk: 25, Health: 75 },
+    { id: "8", Risk: 25, Health: 75 },
   ];
 
   return (
@@ -87,10 +98,12 @@ const MenuDashboard = () => {
             {dataSets.map((data) => (
               <Col key={data.id} md={6}>
                 <DonutChart
-                  data={[
-                    { label: "Risk", value: data.risk },
-                    { label: "Health", value: data.health },
-                  ]}
+                  data={Object.keys(data)
+                    .filter((key) => key !== "id")
+                    .map((key) => ({
+                      label: key,
+                      value: data[key],
+                    }))}
                 />
               </Col>
             ))}
