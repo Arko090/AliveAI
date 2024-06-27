@@ -16,8 +16,6 @@ import MenuDashboard from "./MenuDashboard";
 import "../StyleSheets/Dashboard.css";
 
 // UI Frontend
-// Temporary Components
-// const MenuDashboard = () => <h1>Dashboard Component</h1>;
 const MenuGeneralInformation = () => <h1>General Information Component</h1>;
 const MenuChatbot = () => <h1>Chatbot Component</h1>;
 const MenuAppointments = () => <h1>Appointments Component</h1>;
@@ -35,16 +33,7 @@ const MenuData = [
   {
     icon: faHeartbeat,
     text: "Health Analysis",
-    submenuItems: [
-      { icon: faNotesMedical, text: "Diabetes Analysis" },
-      { icon: faNotesMedical, text: "Feature 2" },
-      { icon: faNotesMedical, text: "Feature 3" },
-      { icon: faNotesMedical, text: "Feature 4" },
-      { icon: faNotesMedical, text: "Feature 5" },
-      { icon: faNotesMedical, text: "Feature 6" },
-      { icon: faNotesMedical, text: "Feature 7" },
-      { icon: faNotesMedical, text: "Feature 8" },
-    ],
+    submenuItems: [{ icon: faNotesMedical, text: "Diabetes Analysis" }],
   },
   {
     icon: faComments,
@@ -56,8 +45,11 @@ const MenuData = [
   },
 ];
 
-// Dashboard Menu Items
-const MenuItem = ({ icon, text, isActive, onClick }) => (
+// Web Menu Dashboard
+
+
+// Web Dashboard Menu Items
+const WebMenuItem = ({ icon, text, isActive, onClick }) => (
   <li>
     <h6 className={`menu-item ${isActive ? "active" : ""}`} onClick={onClick}>
       <FontAwesomeIcon icon={icon} className="dashboard-faIcon" size="1x" />
@@ -66,8 +58,8 @@ const MenuItem = ({ icon, text, isActive, onClick }) => (
   </li>
 );
 
-// Dashboard Sub-Menu Items
-const SubMenuItem = ({ icon, text, onclick }) => (
+// Web Dashboard Sub-Menu Items
+const WebSubMenuItem = ({ icon, text, onclick }) => (
   <li>
     <h6>
       <FontAwesomeIcon icon={icon} className="dashboard-faIcon" size="1x" />
@@ -76,8 +68,8 @@ const SubMenuItem = ({ icon, text, onclick }) => (
   </li>
 );
 
-// Dashboard Menu List
-const MenuList = ({ toggleSubMenu, activeMenu }) => {
+// Web Dashboard Menu List
+const WebMenuList = ({ toggleSubMenu, setActiveMenu, activeMenu }) => {
   return (
     <ul className="dashboard-menu">
       {MenuData.map((item, index) => (
@@ -109,7 +101,7 @@ const MenuList = ({ toggleSubMenu, activeMenu }) => {
                 }`}
               >
                 {item.submenuItems.map((subItem, subIndex) => (
-                  <SubMenuItem
+                  <WebSubMenuItem
                     key={subIndex}
                     icon={subItem.icon}
                     text={subItem.text}
@@ -118,11 +110,11 @@ const MenuList = ({ toggleSubMenu, activeMenu }) => {
               </ul>
             </li>
           ) : (
-            <MenuItem
+            <WebMenuItem
               icon={item.icon}
               text={item.text}
               isActive={activeMenu === index}
-              onClick={() => toggleSubMenu(index)}
+              onClick={() => setActiveMenu(index)}
             />
           )}
         </React.Fragment>
@@ -134,7 +126,6 @@ const MenuList = ({ toggleSubMenu, activeMenu }) => {
 // Web Dashboard
 const WebDashboard = () => {
   const [activeMenu, setActiveMenu] = useState(0);
-
   const toggleSubMenu = (index) =>
     setActiveMenu(activeMenu === index ? 0 : index);
 
@@ -161,7 +152,11 @@ const WebDashboard = () => {
             <h3>Welcome Arko to the Dashboard!</h3>
           </Row>
           <Row>
-            <MenuList toggleSubMenu={toggleSubMenu} activeMenu={activeMenu} />
+            <WebMenuList
+              toggleSubMenu={toggleSubMenu}
+              setActiveMenu={setActiveMenu}
+              activeMenu={activeMenu}
+            />
           </Row>
         </Col>
         <Col>
@@ -172,7 +167,7 @@ const WebDashboard = () => {
   );
 };
 
-// Mobile Dashboard
+// Mobile Dashboard { TEMPORARY }
 const MobileDashboard = () => {
   return <h2>Dashboard Mobile</h2>;
 };
