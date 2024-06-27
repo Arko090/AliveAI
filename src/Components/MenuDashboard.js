@@ -85,9 +85,14 @@ const MenuDashboard = () => {
     <Container>
       <Row>
         <Col className="col-6 col-lg-6">
-          <h1>First Half of Dashboard</h1>
+          <Row>
+            Row 1
+          </Row>
+          <Row>
+            Row 2
+          </Row>
         </Col>
-        <Col className="col-6 col-lg-6 my-3" style={{ maxHeight: "880px", overflowY: "visible", margin: "auto" }}>
+        <Col className="col-6 col-lg-6" style={{ paddingTop: "80px", maxHeight: "880px", overflowY: "visible", margin: "auto" }}>
           <Row>
             {dataSets.map((data) => (
               <Col key={data.id} md={6}>
