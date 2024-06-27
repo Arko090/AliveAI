@@ -71,7 +71,7 @@ const DonutChart = ({
 
 const MenuDashboard = () => {
   const dataSets = [
-    { id: "1", Diabetic: 25, "Non-Diabetic": 75 },
+    { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
     { id: "2", Risk: 25, Health: 75 },
     { id: "3", Risk: 25, Health: 75 },
     { id: "4", Risk: 25, Health: 75 },
@@ -81,18 +81,33 @@ const MenuDashboard = () => {
     { id: "8", Risk: 25, Health: 75 },
   ];
 
+  // Line Graph
+  // X-Axis Attributes
+  const features = ['Diabetic', 'Feature 2', 'Feature 3', 'Feature 4', 'Feature 5', 'Feature 6', 'Feature 7', 'Feature 8'];
+
+  // Y-Axis Attributes
+  const percentage = [0, 25, 50, 75, 100]
+
+  // Note:
+  // Keep Normal Percentage Line Graph to 25 for all
+  // The Variable Graph can have any value between 0-100%.
+
   return (
     <Container>
       <Row>
         <Col className="col-6 col-lg-6">
-          <Row>
-            Row 1
-          </Row>
-          <Row>
-            Row 2
-          </Row>
+          <Row>Row 1</Row>
+          <Row>Row 2</Row>
         </Col>
-        <Col className="col-6 col-lg-6" style={{ paddingTop: "80px", maxHeight: "880px", overflowY: "visible", margin: "auto" }}>
+        <Col
+          className="col-6 col-lg-6"
+          style={{
+            paddingTop: "80px",
+            maxHeight: "880px",
+            overflowY: "visible",
+            margin: "auto",
+          }}
+        >
           <Row>
             {dataSets.map((data) => (
               <Col key={data.id} md={6}>
