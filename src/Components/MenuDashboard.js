@@ -79,7 +79,7 @@ const LineChart = ({ features, percentages }) => {
     const margin = { top: 20, right: 30, bottom: 40, left: 40 };
     const containerWidth = ref.current.parentElement.clientWidth;
     const width = containerWidth - margin.left - margin.right;
-    const height = 200 - margin.top - margin.bottom;
+    const height = 300 - margin.top - margin.bottom;
 
     const g = svg
       .attr("width", containerWidth)
@@ -90,6 +90,7 @@ const LineChart = ({ features, percentages }) => {
     const x = d3
       .scalePoint()
       .domain(features)
+      .padding(0.5)
       .range([0, width]);
 
     const y = d3
@@ -103,7 +104,7 @@ const LineChart = ({ features, percentages }) => {
       .y((d) => y(d));
 
     const peopleData = features.map(() => 25);
-    const userData = features.map(() => Math.floor(Math.random() * 101));
+    const userData = [75, 35, 20, 50, 45, 85, 10, 95];
 
     g.append("g")
       .attr("transform", `translate(0,${height})`)
@@ -118,15 +119,36 @@ const LineChart = ({ features, percentages }) => {
       .datum(peopleData)
       .attr("fill", "none")
       .attr("stroke", "#1D9BCE")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 3)
       .attr("d", line);
 
     g.append("path")
       .datum(userData)
       .attr("fill", "none")
       .attr("stroke", "#29D8BB")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 3)
       .attr("d", line);
+
+    g.selectAll(".dot-people")
+      .data(peopleData)
+      .enter()
+      .append("circle")
+      .attr("class", "dot-people")
+      .attr("cx", (d, i) => x(features[i]))
+      .attr("cy", (d) => y(d))
+      .attr("r", 4)
+      .attr("fill", "#1D9BCE");
+
+    g.selectAll(".dot-user")
+      .data(userData)
+      .enter()
+      .append("circle")
+      .attr("class", "dot-user")
+      .attr("cx", (d, i) => x(features[i]))
+      .attr("cy", (d) => y(d))
+      .attr("r", 4)
+      .attr("fill", "#29D8BB");
+
   }, [features, percentages]);
 
   return (
@@ -172,7 +194,7 @@ const MenuDashboard = () => {
             <Row style={{ paddingTop: "90px" }}>
               Row 1
             </Row>
-            <Row style={{ paddingTop: "300px"}}>
+            <Row style={{ paddingTop: "300px", paddingBottom: "14px"}}>
                 <LineChart features={features} percentages={percentages}/>
             </Row>
           </Col>
