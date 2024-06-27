@@ -69,9 +69,76 @@ const DonutChart = ({
   );
 };
 
+const LineChart = ({ features, percentages }) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    const svg = d3.select(ref.current);
+    svg.selectAll("*").remove();
+
+    const margin = { top: 20, right: 30, bottom: 40, left: 40 };
+    const containerWidth = ref.current.parentElement.clientWidth;
+    const width = containerWidth - margin.left - margin.right;
+    const height = 200 - margin.top - margin.bottom;
+
+    const g = svg
+      .attr("width", containerWidth)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3
+      .scalePoint()
+      .domain(features)
+      .range([0, width]);
+
+    const y = d3
+      .scaleLinear()
+      .domain([0, 100])
+      .range([height, 0]);
+
+    const line = d3
+      .line()
+      .x((d, i) => x(features[i]))
+      .y((d) => y(d));
+
+    const peopleData = features.map(() => 25);
+    const userData = features.map(() => Math.floor(Math.random() * 101));
+
+    g.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x).tickSizeOuter(0))
+      .selectAll("text")
+      .style("font-size", `${Math.min(6, width / features.length)}px`);
+
+    g.append("g")
+      .call(d3.axisLeft(y).tickValues(percentages));
+
+    g.append("path")
+      .datum(peopleData)
+      .attr("fill", "none")
+      .attr("stroke", "#1D9BCE")
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
+
+    g.append("path")
+      .datum(userData)
+      .attr("fill", "none")
+      .attr("stroke", "#29D8BB")
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
+  }, [features, percentages]);
+
+  return (
+    <div className="line-chart-container">
+      <svg ref={ref}></svg>
+    </div>
+  );
+};
+
 const MenuDashboard = () => {
   const dataSets = [
-    { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
+    { id: "1", Diabetic: 25, "Non-Diabetic": 75 },
     { id: "2", Risk: 25, Health: 75 },
     { id: "3", Risk: 25, Health: 75 },
     { id: "4", Risk: 25, Health: 75 },
@@ -83,48 +150,51 @@ const MenuDashboard = () => {
 
   // Line Graph
   // X-Axis Attributes
-  const features = ['Diabetic', 'Feature 2', 'Feature 3', 'Feature 4', 'Feature 5', 'Feature 6', 'Feature 7', 'Feature 8'];
+  const features = [
+    "Diabetic",
+    "Feature 2",
+    "Feature 3",
+    "Feature 4",
+    "Feature 5",
+    "Feature 6",
+    "Feature 7",
+    "Feature 8",
+  ];
 
   // Y-Axis Attributes
-  const percentage = [0, 25, 50, 75, 100]
-
-  // Note:
-  // Keep Normal Percentage Line Graph to 25 for all
-  // The Variable Graph can have any value between 0-100%.
+  const percentages = [0, 25, 50, 75, 100];
 
   return (
-    <Container>
-      <Row>
-        <Col className="col-6 col-lg-6">
-          <Row>Row 1</Row>
-          <Row>Row 2</Row>
-        </Col>
-        <Col
-          className="col-6 col-lg-6"
-          style={{
-            paddingTop: "80px",
-            maxHeight: "880px",
-            overflowY: "visible",
-            margin: "auto",
-          }}
-        >
-          <Row>
-            {dataSets.map((data) => (
-              <Col key={data.id} md={6}>
-                <DonutChart
-                  data={Object.keys(data)
-                    .filter((key) => key !== "id")
-                    .map((key) => ({
-                      label: key,
-                      value: data[key],
-                    }))}
-                />
-              </Col>
-            ))}
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+    <div className="dashboard-wrapper">
+      <Container>
+        <Row>
+          <Col className="col-6 col-lg-6">
+            <Row style={{ paddingTop: "90px" }}>
+              Row 1
+            </Row>
+            <Row style={{ paddingTop: "300px"}}>
+                <LineChart features={features} percentages={percentages}/>
+            </Row>
+          </Col>
+          <Col className="col-6 col-lg-6" style={{ paddingTop: "80px",maxHeight: "880px",overflowY: "visible", margin: "auto"}}>
+            <Row>
+              {dataSets.map((data) => (
+                <Col key={data.id} md={6}>
+                  <DonutChart
+                    data={Object.keys(data)
+                      .filter((key) => key !== "id")
+                      .map((key) => ({
+                        label: key,
+                        value: data[key],
+                      }))}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
