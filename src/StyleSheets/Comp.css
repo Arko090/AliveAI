@@ -87,4 +87,50 @@
     z-index: 10;
   }
 
-  /* Menu General Info */
+    /* Menu General Info */
+
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .profile-container {
+      width: 100%;
+      height: 100%;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 20px;
+      background: #fff;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+    
+    .profile-field {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    
+    .profile-field label {
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+    
+    .profile-field p {
+      margin: 0;
+      padding: 8px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+    }
