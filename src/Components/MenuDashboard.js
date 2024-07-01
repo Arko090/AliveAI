@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { Container, Row, Col } from "react-bootstrap";
 import "../StyleSheets/Comp.css";
@@ -21,15 +21,15 @@ const DonutChart = ({
   useEffect(() => {
     const svg = d3
       .select(ref.current)
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
     const color = d3
       .scaleOrdinal()
       .domain(data.map((d) => d.label))
-      .range(["#1D9BCE", "#29D8BB"]);
+      .range(['#1D9BCE', '#29D8BB']);
 
     const pie = d3.pie().value((d) => d.value);
 
@@ -43,7 +43,19 @@ const DonutChart = ({
       .attr("d", arc)
       .attr("fill", (d) => color(d.data.label))
       .attr("stroke", "white")
-      .style("stroke-width", "2px");
+      .style("stroke-width", "2px")
+      .attr('transform', 'rotate(0)')
+      .transition()
+      .duration(2000)
+      .attrTween('d', function(d) {
+        var interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+        return function(t) {
+          return arc(interpolate(t));
+        };
+      })
+      .attrTween('transform', function() {
+        return d3.interpolateString('rotate(0, 0)', 'rotate(360, 0)');
+      });
   }, [data, width, height, innerRadius, outerRadius]);
 
   return (
@@ -53,15 +65,15 @@ const DonutChart = ({
         <div className="label left">
           <span
             className="color-box"
-            style={{ backgroundColor: "#1D9BCE" }}
-          ></span>{" "}
+            style={{ backgroundColor: '#1D9BCE' }}
+          ></span>{' '}
           {label1}: {value1}%
         </div>
         <div className="label right">
           <span
             className="color-box"
-            style={{ backgroundColor: "#29D8BB" }}
-          ></span>{" "}
+            style={{ backgroundColor: '#29D8BB' }}
+          ></span>{' '}
           {label2}: {value2}%
         </div>
       </div>
@@ -69,7 +81,7 @@ const DonutChart = ({
   );
 };
 
-const LineChart = ({ features, percentages }) => {
+const LineChart = ({ features, percentages, peopleData, userData }) => {
   const ref = useRef();
 
   useEffect(() => {
@@ -103,9 +115,6 @@ const LineChart = ({ features, percentages }) => {
       .x((d, i) => x(features[i]))
       .y((d) => y(d));
 
-    const peopleData = features.map(() => 25);
-    const userData = [75, 35, 20, 50, 45, 85, 10, 95];
-
     g.append("g")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x).tickSizeOuter(0))
@@ -115,39 +124,59 @@ const LineChart = ({ features, percentages }) => {
     g.append("g")
       .call(d3.axisLeft(y).tickValues(percentages));
 
-    g.append("path")
+    const peoplePath = g.append("path")
       .datum(peopleData)
       .attr("fill", "none")
       .attr("stroke", "#29D8BB")
       .attr("stroke-width", 3)
       .attr("d", line);
 
-    g.append("path")
+    const totalLengthPeople = peoplePath.node().getTotalLength();
+
+    peoplePath
+      .attr("stroke-dasharray", `${totalLengthPeople} ${totalLengthPeople}`)
+      .attr("stroke-dashoffset", totalLengthPeople)
+      .transition()
+      .duration(2000)
+      .ease(d3.easeLinear)
+      .attr("stroke-dashoffset", 0);
+
+    const userPath = g.append("path")
       .datum(userData)
       .attr("fill", "none")
       .attr("stroke", "#1D9BCE")
       .attr("stroke-width", 3)
       .attr("d", line);
 
-    g.selectAll(".dot-people")
-      .data(peopleData)
-      .enter()
-      .append("circle")
-      .attr("class", "dot-people")
-      .attr("cx", (d, i) => x(features[i]))
-      .attr("cy", (d) => y(d))
-      .attr("r", 4)
-      .attr("fill", "#29D8BB");
+    const totalLengthUser = userPath.node().getTotalLength();
 
-    g.selectAll(".dot-user")
-      .data(userData)
-      .enter()
-      .append("circle")
-      .attr("class", "dot-user")
-      .attr("cx", (d, i) => x(features[i]))
-      .attr("cy", (d) => y(d))
-      .attr("r", 4)
-      .attr("fill", "#1D9BCE");
+    userPath
+      .attr("stroke-dasharray", `${totalLengthUser} ${totalLengthUser}`)
+      .attr("stroke-dashoffset", totalLengthUser)
+      .transition()
+      .duration(2000)
+      .ease(d3.easeLinear)
+      .attr("stroke-dashoffset", 0);
+
+    const addDots = (data, className, color) => {
+      g.selectAll(`.${className}`)
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("class", className)
+        .attr("cx", (d, i) => x(features[i]))
+        .attr("cy", (d) => y(d))
+        .attr("r", 4)
+        .attr("fill", color)
+        .attr("opacity", 0)
+        .transition()
+        .delay((d, i) => (i + 1) * (2000 / features.length))
+        .duration(500)
+        .attr("opacity", 1);
+    };
+
+    addDots(peopleData, "dot-people", "#29D8BB");
+    addDots(userData, "dot-user", "#1D9BCE");
 
     svg.append("text")
       .attr("transform", `translate(${width / 2 + margin.left},${height + margin.top + margin.bottom - 10})`)
@@ -164,7 +193,7 @@ const LineChart = ({ features, percentages }) => {
       .style("font-size", "8px")
       .text("Percentages \u2192");
 
-  }, [features, percentages]);
+  }, [features, percentages, peopleData, userData]);
 
   return (
     <div className="line-chart-container">
@@ -175,7 +204,6 @@ const LineChart = ({ features, percentages }) => {
 
 const BarChart = ({ data, yAxisLabels, xAxisLabels, userValueData, width = 400, height = 300 }) => {
   const ref = useRef();
-  const [hoveredLabel, setHoveredLabel] = useState(null);
 
   useEffect(() => {
     const svg = d3.select(ref.current);
@@ -190,7 +218,7 @@ const BarChart = ({ data, yAxisLabels, xAxisLabels, userValueData, width = 400, 
     const x = d3.scaleBand()
       .domain(xAxisLabels)
       .range([0, innerWidth])
-      .padding(0.1);
+      .padding(0.4);
 
     const y = d3.scaleLinear()
       .domain([0, 100])
@@ -242,24 +270,42 @@ const BarChart = ({ data, yAxisLabels, xAxisLabels, userValueData, width = 400, 
       return userValueData >= start && userValueData <= end;
     };
 
+    const updateBars = (highlightLabel) => {
+      g.selectAll(".bar")
+        .attr("fill", (d) => {
+          if (!highlightLabel && isHighlighted(d.label, userValueData)) {
+            return "#1D9BCE";
+          } else if (highlightLabel && d.label === highlightLabel) {
+            return "#1D9BCE";
+          } else {
+            return "#29D8BB";
+          }
+        });
+    };
+
     g.selectAll(".bar")
       .data(data)
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", (d) => x(d.label))
-      .attr("y", (d) => y(d.value))
+      .attr("x", d => x(d.label))
+      .attr("y", innerHeight)
       .attr("width", x.bandwidth())
-      .attr("height", (d) => innerHeight - y(d.value))
-      .attr("fill", (d) => hoveredLabel === null && isHighlighted(d.label, userValueData) ? "#1D9BCE" : (hoveredLabel === d.label ? "#1D9BCE" : "#29D8BB"))
+      .attr("height", 0)
+      .attr("fill", (d) => isHighlighted(d.label, userValueData) ? "#1D9BCE" : "#29D8BB")
       .on("mouseover", function (event, d) {
-        setHoveredLabel(d.label);
+        updateBars(d.label);
       })
       .on("mouseout", function (event, d) {
-        setHoveredLabel(null);
-      });
+        updateBars(null);
+      })
+      .transition()
+      .duration(2000)
+      .delay((d, i) => i * 100)
+      .attr("y", (d) => y(d.value))
+      .attr("height", (d) => innerHeight - y(d.value));
 
-  }, [data, yAxisLabels, xAxisLabels, width, height, userValueData, hoveredLabel]);
+  }, [data, yAxisLabels, xAxisLabels, width, height, userValueData]);
 
   return (
     <div className="bar-chart-container" style={{ width: "100%", height: `${height}px` }}>
@@ -269,7 +315,7 @@ const BarChart = ({ data, yAxisLabels, xAxisLabels, userValueData, width = 400, 
 };
 
 const MenuDashboard = () => {
-  const dataSets = [
+  const donutData = [
     { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
     { id: "2", Risk: 25, Health: 75 },
     { id: "3", Risk: 25, Health: 75 },
@@ -295,12 +341,16 @@ const MenuDashboard = () => {
   // Line Graph Y-Axis Attributes
   const linePercentages = [0, 25, 50, 75, 100];
 
+  // Line Graph Data
+  const peopleData = lineFeatures.map(() => 25);
+  const userData = [75, 35, 20, 50, 45, 85, 10, 95];
+
   // Bar Chart Data
   const barData = [
     { label:  "0-10", value: 30 },
     { label: "11-20", value: 35 },
     { label: "21-30", value: 80 },
-    { label: "31-50", value: 45 },
+    { label: "31-40", value: 45 },
     { label: "41-50", value: 60 },
     { label: "51-60", value: 20 },
     { label: "61-70", value: 90 },
@@ -325,7 +375,7 @@ const MenuDashboard = () => {
               <BarChart data={barData} yAxisLabels={barYAxisLabels} xAxisLabels={barXAxisLabels} userValueData={userValueData}/>
             </Row>
             <Row style={{ paddingBottom: "14px"}}>
-              <LineChart features={lineFeatures} percentages={linePercentages}/>
+              <LineChart features={lineFeatures} percentages={linePercentages} peopleData={peopleData} userData={userData}/>
             </Row>
           </Col>
           <Col className="col-6 col-lg-6" style={{ paddingTop: "80px", maxHeight: "880px", overflowY: "visible", margin: "auto"}}>
