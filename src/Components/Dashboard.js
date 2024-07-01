@@ -13,10 +13,10 @@ import {
 // import { useLocation } from "react-router-dom";
 
 import MenuDashboard from "./MenuDashboard";
+import MenuGeneralInfo from "./MenuGeneralInfo";
 import "../StyleSheets/Dashboard.css";
 
 // UI Frontend
-const MenuGeneralInformation = () => <h1>General Information Component</h1>;
 const MenuChatbot = () => <h1>Chatbot Component</h1>;
 const MenuAppointments = () => <h1>Appointments Component</h1>;
 
@@ -134,7 +134,7 @@ const WebDashboard = () => {
       case 0:
         return <MenuDashboard />;
       case 1:
-        return <MenuGeneralInformation />;
+        return <MenuGeneralInfo />;
       case 3:
         return <MenuChatbot />;
       case 4:

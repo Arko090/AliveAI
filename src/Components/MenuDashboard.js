@@ -160,7 +160,7 @@ const LineChart = ({ features, percentages }) => {
 
 const MenuDashboard = () => {
   const dataSets = [
-    { id: "1", Diabetic: 25, "Non-Diabetic": 75 },
+    { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
     { id: "2", Risk: 25, Health: 75 },
     { id: "3", Risk: 25, Health: 75 },
     { id: "4", Risk: 25, Health: 75 },
