@@ -80,12 +80,9 @@
     border-radius: 8px;
   }
 
-<<<<<<< HEAD
+
   .line-chart-container:hover {
     cursor: pointer;
-=======
-  .line-chart-container:hover, .bar-chart-container:hover {
->>>>>>> 3820938e9b2bff9d976a180b339cc553ed16c41d
     transform: scale(1.05);
     z-index: 10;
   }

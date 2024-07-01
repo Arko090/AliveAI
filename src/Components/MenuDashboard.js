@@ -269,15 +269,8 @@ const BarChart = ({ data, yAxisLabels, xAxisLabels, userValueData, width = 400, 
 };
 
 const MenuDashboard = () => {
-<<<<<<< HEAD
   const dataSets = [
     { id: "1", "Diabetic": 25, "Non-Diabetic": 75 },
-=======
-
-  // Donut Graph Data
-  const donutData = [
-    { id: "1", Diabetic: 25, "Non-Diabetic": 75 },
->>>>>>> 3820938e9b2bff9d976a180b339cc553ed16c41d
     { id: "2", Risk: 25, Health: 75 },
     { id: "3", Risk: 25, Health: 75 },
     { id: "4", Risk: 25, Health: 75 },
